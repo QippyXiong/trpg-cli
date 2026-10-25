@@ -1,22 +1,5 @@
-# HTTP API 契约（拆分初版）
+# API 契约入口
 
-三端共享同一服务端。JSON POST、Cookie 会话；浏览器保持同源。未认证 state 只返回登录页公开配置。401需登录、403无权限或角色死亡、409顺序/轮次/重复操作冲突、400参数错误。所有写请求需要 Content-Type: application/json。
+唯一维护来源为 `trpg-server/docs/API.md`。本仓库不复制事件结构或 API 字段定义，避免三份规范分别修改。请配合服务端检出使用，并运行跨仓库集成测试核对。协议变更先在服务端明确兼容性，再更新客户端。
 
-| 功能 | 路由与主要参数 |
-| --- | --- |
-| 登录/登出 | POST /api/login {username,password}；POST /api/logout {} |
-| 大厅/状态 | GET /api/games；GET /api/state?game_id=N |
-| 角色/加入/就位 | POST /api/role/select {game_id,role_id}；/api/game/join {game_id}；/api/game/ready {game_id,ready} |
-| 行动 | POST /api/message {game_id,round_no,kind:"action",text,check_id,item_ids:[],take_item_ids:[],request_id} |
-| 闲聊 | POST /api/message {game_id,kind:"chat",text,request_id} |
-| 历史/归档 | GET /api/history?game_id=N&before=ID；/api/export?game_id=N&format=md或jsonl |
-| 审计 | GET /api/random/audit?game_id=N |
-| 主持人 | POST /api/settlement、/api/round/next、/api/player/state、/api/final；具体格式与验证在服务端 gameplay.py 及其测试 |
-
-`flow.adventure.initiative.current`、slots、deadline 和 complete 是顺序权威；请勿从旧聊天推测轮次。提交锁定由服务端执行，相同 request_id 重试返回 duplicate，不得换编号绕过。私密内容由服务端按请求者身份裁剪，客户端不缓存其他账号的数据。
-
-物品申报不表示效果已生效，主持人确认实际状态变更。服务端是规则、权限与数据唯一权威，两个客户端不各自复制骰子或伤害逻辑。
-
-## 契约来源
-
-本文件的唯一维护来源为 trpg-server/docs/API.md；客户端所带文档是参考快照，不是独立协议实现。变更先更新服务端，并以客户端跨仓库集成测试核对。当前不引入独立协议包。
+当前使用 JSON HTTP API 与 Cookie 会话；权限、顺序、超时和提交锁定以服务端返回为准。暂不建立独立协议包；以后需要生成类型或 SDK 时再抽取。
