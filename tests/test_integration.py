@@ -15,8 +15,8 @@ from urllib.parse import urlsplit
 from nighttable_cli.client import Client,main
 
 BASE=Path(__file__).resolve().parents[2]
-BACKEND=Path(os.environ.get('TRPG_SERVER_DIR',BASE/'nighttable-server'))
-WEB=Path(os.environ.get('TRPG_WEB_DIR',BASE/'nighttable-web'))
+BACKEND=Path(os.environ.get('TRPG_SERVER_DIR',BASE/'trpg-server'))
+WEB=Path(os.environ.get('TRPG_WEB_DIR',BASE/'trpg-web'))
 sys.path.insert(0,str(BACKEND))
 import server as room
 spec=importlib.util.spec_from_file_location('web_dev',WEB/'dev.py');web=importlib.util.module_from_spec(spec);spec.loader.exec_module(web)

@@ -1,6 +1,6 @@
 # NightTable CLI
 
-夜航终端客户端，Python 3.9+，运行时零第三方依赖。通过 HTTP API 连接 nighttable-server，不接触数据库或复制结算规则。
+夜航终端客户端，Python 3.9+，运行时零第三方依赖。通过 HTTP API 连接 trpg-server，不接触数据库或复制结算规则。
 
 ## 使用
 
@@ -18,7 +18,7 @@ python3 -m nighttable_cli export 1 --format md --output game-1.md
 python3 -m nighttable_cli logout
 ```
 
-也可 `pip install .` 后用 `nighttable` 命令。统一设置 `NIGHTTABLE_URL`，或每次带 `--server`。公网仅允许 HTTPS，本机回环允许 HTTP。密码交互输入，不接受命令行明文密码参数。会话按服务器地址分开保存在 `~/.local/share/nighttable-cli`，目录0700、Cookie文件0600；不会每轮重新登录。
+也可 `pip install .` 后用 `nighttable` 命令。统一设置 `NIGHTTABLE_URL`，或每次带 `--server`。公网仅允许 HTTPS，本机回环允许 HTTP。密码交互输入，不接受命令行明文密码参数。会话按服务器地址分开保存在 `~/.local/share/trpg-cli`，目录0700、Cookie文件0600；不会每轮重新登录。
 
 `ready --cancel` 取消就位；`chat` 发桌边消息；`history` 支持 `--before` 分页；`audit` 查询随机复核。`action` 自动读取当前轮号，使用 `--item ID` 和 `--take ID` 申报物品。顺序、超时、提交锁定仍由服务端判断。
 
@@ -26,4 +26,4 @@ python3 -m nighttable_cli logout
 
 主持人和高级操作可用 `api settlement --body-file settlement.json` 等提交完整 API JSON；权限不变。导出文件默认拒绝覆盖。用户自己的会话和导出不可提交到 Git。
 
-CLI 回归可在相邻 nighttable-server 存在时运行：`python3 -m unittest discover -s tests`。本版是命令式 CLI，暂不提供全屏 TUI 或后台自动决策。
+CLI 回归可在相邻 trpg-server 存在时运行：`python3 -m unittest discover -s tests`。本版是命令式 CLI，暂不提供全屏 TUI 或后台自动决策。
