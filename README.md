@@ -36,7 +36,7 @@ python3 -m nighttable_cli export 1 --format md --output game-1.md
 python3 -m nighttable_cli logout
 ```
 
-也可 `pip install .` 后用 `nighttable` 命令。统一设置 `NIGHTTABLE_URL`，或每次带 `--server`。公网仅允许 HTTPS，本机回环允许 HTTP。密码交互输入，不接受命令行明文密码参数。会话按服务器地址分开保存在 `~/.local/share/trpg-cli`，目录0700、Cookie文件0600；不会每轮重新登录。
+也可 `pip install .` 后用 `nighttable` 命令。统一设置 `NIGHTTABLE_URL`，或每次带 `--server`。公网仅允许 HTTPS，本机回环允许 HTTP。密码交互输入，不接受命令行明文密码参数。会话按服务器地址分开保存在 `~/.local/share/trpg-cli`，Linux/macOS上目录0700、Cookie文件0600；Windows沿用用户目录ACL，不强行chmod；不会每轮重新登录。
 
 `ready --cancel` 取消就位；`chat` 发桌边消息；`history` 支持 `--before` 分页；`audit` 查询随机复核。`action` 自动读取当前轮号，使用 `--item ID` 和 `--take ID` 申报物品。顺序、超时、提交锁定仍由服务端判断。
 
@@ -73,3 +73,24 @@ python3 -m nighttable_cli logout
 路径均指仓库根目录；集成测试还需服务端自己的依赖（含Pillow）。不设置变量时，跨仓库测试明确显示SKIPPED；设置了无效路径则报错，不把配置错误当成通过。缺少相邻目录不会再导致pytest收集失败。
 
 CI从单独checkout构建安装Python包，在Python 3.9/3.12上跑独立测试，并从源码目录之外运行nighttable --help，验证安装包包含protocol.json。可选集成未启用时会分别报告“独立通过”和“集成跳过”，不混成全部通过。
+
+## Windows会话目录和pip临时目录
+
+Windows不会把POSIX的0700/0600当成完整ACL策略。客户端沿用所选目录的Windows ACL，不对现有目录或Cookie文件强制chmod；建议把会话放在自己的用户目录。真正的读写失败仍返回错误，不绕过文件系统权限。
+
+PowerShell预创建目录也受支持：
+
+    $sessionPath = Join-Path $HOME "nighttable-session"
+    New-Item -ItemType Directory -Force -Path $sessionPath | Out-Null
+    python -m nighttable_cli --session-dir $sessionPath --server https://你的服务地址 login 你的账号
+
+如果pip因临时目录不可写而失败，可只在当前PowerShell会话指定自己可写的位置，不需要管理员权限：
+
+    $env:TEMP = Join-Path $HOME "nighttable-pip-tmp"
+    New-Item -ItemType Directory -Force -Path $env:TEMP | Out-Null
+    $env:TMP = $env:TEMP
+    python -m pip install . --no-cache-dir
+
+这处理的是安装环境，不替代CLI功能验证。源码运行仍可使用；账号密码由服务方私下交付，不放命令行或群聊。
+
+CI增加Windows与Linux的Python3.9/3.12矩阵，并用真实PowerShell创建目录、保存Cookie、再次加载，验证此兼容问题。

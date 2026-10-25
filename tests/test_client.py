@@ -11,6 +11,7 @@ from unittest.mock import patch
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlsplit
 from nighttable_cli.client import Client, main
+import nighttable_cli.client as client_module
 
 
 class APIHandler(BaseHTTPRequestHandler):
@@ -93,6 +94,18 @@ class StandaloneClient(unittest.TestCase):
         if os.name != "nt":
             self.assertEqual(restored.file.stat().st_mode & 0o777, 0o600)
             self.assertEqual(self.sessions.stat().st_mode & 0o777, 0o700)
+
+    def test_windows_existing_directory_and_cookie_do_not_require_chmod(self):
+        self.login()
+        with patch.object(client_module, "IS_WINDOWS", True), patch.object(Path, "chmod", side_effect=PermissionError(5, "Access denied")) as chmod:
+            restored = Client(self.url, self.sessions)
+            self.assertEqual(restored.request("/api/state")["user"]["username"], "fixture-user")
+            chmod.assert_not_called()
+
+    def test_posix_permission_errors_are_not_silenced(self):
+        with patch.object(client_module, "IS_WINDOWS", False), patch.object(Path, "chmod", side_effect=PermissionError("denied")):
+            with self.assertRaises(PermissionError):
+                Client(self.url, self.sessions)
 
     def test_origins_do_not_share_sessions(self):
         self.login()

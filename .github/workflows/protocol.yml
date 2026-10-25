@@ -22,9 +22,12 @@ jobs:
       - run: npm run test --if-present
 
   cli-tests:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    env:
+      PYTHONUTF8: "1"
     strategy:
       matrix:
+        os: [ubuntu-latest, windows-latest]
         python-version: ['3.9', '3.12']
     steps:
       - uses: actions/checkout@v4
@@ -35,6 +38,13 @@ jobs:
         run: python -m pip install '.[test]'
       - name: Test the standalone checkout
         run: python -m pytest -q -rs
+      - name: Reuse a session directory created by PowerShell
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $sessionPath = Join-Path $env:RUNNER_TEMP "nighttable-powershell-session"
+          New-Item -ItemType Directory -Force -Path $sessionPath | Out-Null
+          python -c "from nighttable_cli.client import Client; import sys; c=Client('http://127.0.0.1:8765', sys.argv[1]); c.save(); Client('http://127.0.0.1:8765', sys.argv[1]); print('PowerShell-created session directory and existing cookie file reused')" "$sessionPath"
       - name: Run installed entry point outside the source tree
         working-directory: ${{ runner.temp }}
         run: nighttable --help

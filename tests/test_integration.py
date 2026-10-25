@@ -54,7 +54,8 @@ class Integration(unittest.TestCase):
    with contextlib.redirect_stdout(out),contextlib.redirect_stderr(io.StringIO()):code=main(argv+list(args))
    self.assertEqual(code,0,out.getvalue());return out.getvalue()
   with patch('getpass.getpass',return_value='integration-only-password'):self.assertNotIn('integration-only-password',cli('login','player'))
-  player=Client(self.web_url,sessions);self.assertEqual(player.file.stat().st_mode&0o777,0o600)
+  player=Client(self.web_url,sessions)
+  if os.name!='nt':self.assertEqual(player.file.stat().st_mode&0o777,0o600)
   self.assertEqual(player.request('/api/state')['user']['username'],'player')
   host=Client(self.url,Path(self.tmp.name)/'host');host.request('/api/login',{'username':'host','password':'integration-only-password'})
   gid=host.request('/api/game/create',{'title':'split integration'})['game_id']

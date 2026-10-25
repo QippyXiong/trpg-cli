@@ -13,6 +13,14 @@ import urllib.parse
 import urllib.request
 import uuid
 
+IS_WINDOWS = os.name == 'nt'
+
+def restrict_posix_permissions(path, mode):
+ # Windows chmod does not apply POSIX modes or define the directory ACL.
+ # Keep the user's existing ACL and let actual filesystem errors propagate.
+ if not IS_WINDOWS:
+  path.chmod(mode)
+
 class NoRedirect(urllib.request.HTTPRedirectHandler):
  def redirect_request(self,*args,**kwargs):return None
 
@@ -23,11 +31,11 @@ class Client:
    raise ValueError('服务器必须是无账号、无路径的 HTTP(S) origin')
   if u.scheme=='http' and u.hostname not in ('127.0.0.1','localhost','::1'):raise ValueError('公网服务器必须使用 HTTPS')
   self.url=url.rstrip('/');directory=Path(session_dir or Path.home()/'.local/share/trpg-cli')
-  directory.mkdir(parents=True,exist_ok=True,mode=0o700);directory.chmod(0o700)
+  directory.mkdir(parents=True,exist_ok=True,mode=0o700);restrict_posix_permissions(directory,0o700)
   self.file=directory/(hashlib.sha256(self.url.encode()).hexdigest()+'.cookies')
   self.cookies=http.cookiejar.LWPCookieJar(str(self.file))
   if self.file.exists():
-   self.file.chmod(0o600);self.cookies.load(ignore_discard=True)
+   restrict_posix_permissions(self.file,0o600);self.cookies.load(ignore_discard=True)
   self.opener=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self.cookies),NoRedirect())
  def save(self):
   temp=self.file.with_suffix('.tmp-'+uuid.uuid4().hex)
