@@ -9,7 +9,7 @@ const contract=JSON.parse(raw);
 if(!contract.version.startsWith('0.1.'))throw Error('Unsupported protocol version');
 const lock=JSON.stringify({package:'@qippyxiong/trpg-protocol',version:contract.version,sha256:createHash('sha256').update(raw).digest('hex')},null,2)+'\n';
 for(const [file,data] of [[resolve('protocol.lock.json'),lock]]){
- if(check){let value;try{value=await readFile(file,'utf8')}catch{}if(value!==data){console.error('Out of sync: '+file);process.exitCode=1}}
+ if(check){let value;try{value=await readFile(file,'utf8')}catch{}if(value?.replace(/\r\n/g,'\n')!==data){console.error('Out of sync: '+file);process.exitCode=1}}
  else{await mkdir(dirname(file),{recursive:true});await writeFile(file,data)}
 }
 if(!process.exitCode)console.log((check?'Verified':'Synced')+' @qippyxiong/trpg-protocol '+contract.version);
