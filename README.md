@@ -3,31 +3,11 @@
 夜航终端客户端，Python 3.9+，运行时零第三方依赖。通过 HTTP API 连接 trpg-server，不接触数据库或复制结算规则。
 
 
-## 首次安装：已发布的私有协议包
+## 开源使用与依赖
 
-`@qippyxiong/trpg-protocol@0.1.0` 已发布到私有 GitHub Packages，仓库所有者为 `QippyXiong`。三个应用已提交正式 registry 安装锁文件，**无需相邻 clone 协议源码或先 pack**。未认证/未授权用户仍会收到401/403，不能当成包不存在。
+本项目采用[MIT许可证](LICENSE)。公开clone后可直接运行Python CLI，**运行不需要Node或GitHub Packages凭据**，协议JSON已包含在源码与Python安装包中。服务端地址及登录账号需由实际运行者提供。
 
-Node.js 22+；先确保账号有包的读取权限，并只在本机完成认证：
-
-```sh
-npm login --scope=@qippyxiong --auth-type=legacy --registry=https://npm.pkg.github.com
-npm ci --ignore-scripts --no-audit --no-fund
-npm run protocol:check
-```
-
-认证只写用户级配置或使用GitHub Actions Secrets，不把token写入项目.npmrc、Git或群聊。项目.npmrc仅包含scope到registry的映射。
-
-已从真实私有GitHub仓库全新clone，并使用空npm缓存验证 registry安装及协议检查。**跨仓库CI当前仍缺包读取授权**：在包设置的 Manage Actions access 中添加 trpg-server、trpg-web、trpg-cli 并授予Read；三端工作流使用各自GITHUB_TOKEN，不默认共享发布token。授权后需重新运行CI确认。
-
-开发协议源码时仍可相邻clone trpg-protocol，先 `npm ci --ignore-scripts` 和 `npm pack`，在应用中临时执行：
-
-```sh
-npm install --save-exact --ignore-scripts ../trpg-protocol/qippyxiong-trpg-protocol-0.1.0.tgz
-npm run protocol:sync
-npm run protocol:check
-```
-
-此file依赖只用于本地改动，不提交；切回正式发布版本执行 `npm install --save-exact --ignore-scripts @qippyxiong/trpg-protocol@0.1.0` 并核对锁文件。
+只有开发或更新共用契约时才需要npm：协议源码同样MIT开源，npm包保留在GitHub Packages；该registry即使公开仍要求认证。凭据放用户配置或GitHub Actions Secrets，不写进项目或群聊。
 
 
 ## 使用
@@ -58,16 +38,10 @@ python3 -m nighttable_cli logout
 
 ## 共用协议依赖
 
-本仓库声明 `@qippyxiong/trpg-protocol: 0.1.0`，正式安装不依赖相邻目录。包已发布到GitHub Packages并完成真实冷安装验证，CI跨仓库授权仍待完成。更新协议时执行 `npm install --ignore-scripts`、`npm run protocol:sync`、`npm run protocol:check` 并提交安装锁文件。Python运行无需Node。详见 [协议说明](docs/API.md)。
+本仓库声明 `@qippyxiong/trpg-protocol: 0.1.1`，正式安装不依赖相邻目录。包已发布到GitHub Packages并完成真实冷安装验证，CI跨仓库授权仍待完成。更新协议时执行 `npm install --ignore-scripts`、`npm run protocol:sync`、`npm run protocol:check` 并提交安装锁文件。Python运行无需Node。详见 [协议说明](docs/API.md)。
 
 ## 固定分发边界
 
 仅 `@qippyxiong/trpg-protocol` 使用 npm 独立分发。服务端保持 Python 项目，网页分发静态资源，CLI 保持 Python 包（`python3 -m nighttable_cli` 或安装后的终端命令）。应用仓库里的 package.json 只用于构建期契约依赖与检查，不表示将 Python 应用改成 npm 应用。
 
-## GitHub Packages 发布方案
-
-已选择私有 GitHub Packages，scope 映射在 .npmrc，发布 registry 被限定为 https://npm.pkg.github.com。实际所有者已核验为QippyXiong，仓库已推送，协议包0.1.0已发布为private。
-
-协议仓库的 Publish private protocol package 工作流只可手动触发，先核验私有仓库及scope，再测试、绑定实际仓库URL并发布；新包按GitHub默认保持private，不添加public发布选项。三端CI具备packages:read，仍须在包的Actions访问设置中授予这些私有仓库读取权限，或配置只读NPM_READ_TOKEN。本机可通过npm login --scope=@qippyxiong --auth-type=legacy --registry=https://npm.pkg.github.com认证，token只在本机输入，不入库或群聊。
-
-CI正式验收会先通过认证查询GitHub Packages上的0.1.0，再安装并检查契约；不会接受file依赖作为通过依据。目前这条真实私有registry链路尚未实测，等待远程仓库与包读取授权。
+源码公开与GitHub Packages包公开是独立设置；安装与CI状态以实际验证为准。

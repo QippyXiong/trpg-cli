@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "trpg-cli"
 version = "0.1.0"
 description = "Terminal HTTP client for NightTable tabletop rooms"
+license = {file = "LICENSE"}
 requires-python = ">=3.9"
 dependencies = []
 
