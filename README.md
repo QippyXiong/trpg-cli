@@ -30,8 +30,14 @@ python3 -m nighttable_cli logout
 
 ## 共用协议依赖
 
-本仓库声明 `@xiong/trpg-protocol: 0.1.0`，正式安装不依赖相邻目录。包发布目标尚待确认，当前只用已打包tgz完成本地验证。发布后执行 `npm install --ignore-scripts`、`npm run protocol:sync`、`npm run protocol:check` 并提交安装锁文件。Python运行无需Node。详见 [协议说明](docs/API.md)。
+本仓库声明 `@xiong/trpg-protocol: 0.1.0`，正式安装不依赖相邻目录。包发布目标已选GitHub Packages，实际仓库地址与权限待核验，当前只用已打包tgz完成本地验证。发布后执行 `npm install --ignore-scripts`、`npm run protocol:sync`、`npm run protocol:check` 并提交安装锁文件。Python运行无需Node。详见 [协议说明](docs/API.md)。
 
 ## 固定分发边界
 
 仅 `@xiong/trpg-protocol` 使用 npm 独立分发。服务端保持 Python 项目，网页分发静态资源，CLI 保持 Python 包（`python3 -m nighttable_cli` 或安装后的终端命令）。应用仓库里的 package.json 只用于构建期契约依赖与检查，不表示将 Python 应用改成 npm 应用。
+
+## GitHub Packages 发布方案
+
+已选择私有 GitHub Packages，scope 映射在 .npmrc，发布 registry 被限定为 https://npm.pkg.github.com。实际仓库所有者必须与 @xiong 对应；当前尚未拿到远程地址，未推送或发布。
+
+协议仓库的 Publish private protocol package 工作流只可手动触发，先核验私有仓库及scope，再测试、绑定实际仓库URL并发布；新包按GitHub默认保持private，不添加public发布选项。三端CI具备packages:read，仍须在包的Actions访问设置中授予这些私有仓库读取权限，或配置只读NPM_READ_TOKEN。本机可通过npm login --scope=@xiong --auth-type=legacy --registry=https://npm.pkg.github.com认证，token只在本机输入，不入库或群聊。
