@@ -1,12 +1,46 @@
 {
   "name": "trpg-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test",
+    "prepack": "npm run build",
     "protocol:sync": "node scripts/protocol.mjs",
-    "protocol:check": "node scripts/protocol.mjs --check"
+    "protocol:check": "node scripts/protocol.mjs --check",
+    "test:package": "node scripts/package-smoke.mjs"
   },
   "dependencies": {
     "@qippyxiong/trpg-protocol": "https://github.com/QippyXiong/trpg-protocol/releases/download/v0.1.1/qippyxiong-trpg-protocol-0.1.1.tgz"
-  }
+  },
+  "type": "module",
+  "description": "TypeScript terminal client for NightTable rooms",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "nighttable": "dist/cli.js",
+    "trpg-cli": "dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^22.0.0"
+  },
+  "bundledDependencies": [
+    "@qippyxiong/trpg-protocol"
+  ]
 }

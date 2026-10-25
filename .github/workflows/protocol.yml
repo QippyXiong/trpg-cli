@@ -1,50 +1,35 @@
-name: Release protocol consistency
+name: TypeScript CLI
 on: [push, pull_request]
 permissions:
   contents: read
 jobs:
-  protocol:
-    runs-on: ubuntu-latest
+  cli:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Download pinned public protocol release
+      - name: Download pinned public protocol
+        shell: bash
         run: curl --fail --location --proto '=https' --tlsv1.2 --retry 2 --max-time 90 --output protocol.tgz "$(node -p "require('./protocol-release.json').url")"
-      - name: Verify release checksum and lock source
+      - name: Verify public artifact and lock
         run: node scripts/check-release.mjs protocol.tgz
-      - name: Install the verified artifact without registry credentials
-        run: npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund ./protocol.tgz
-      - name: Verify installed package identity
-        run: node -e 'const fs=require("fs");const p=JSON.parse(fs.readFileSync("node_modules/@qippyxiong/trpg-protocol/package.json"));const pin=require("./protocol-release.json");if(p.name!==pin.package||p.version!==pin.version||p.license!=="MIT")throw Error("Installed artifact metadata mismatch");'
+      - name: Seed verified contract into the local npm cache
+        run: npm cache add ./protocol.tgz --ignore-scripts
+      - name: Install locked dependencies without install scripts
+        run: npm ci --ignore-scripts --no-audit --no-fund
       - run: npm run protocol:check
-      - run: npm run test --if-present
-
-  cli-tests:
-    runs-on: ${{ matrix.os }}
-    env:
-      PYTHONUTF8: "1"
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        python-version: ['3.9', '3.12']
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Build and install Python CLI with test dependencies
-        run: python -m pip install '.[test]'
-      - name: Test the standalone checkout
-        run: python -m pytest -q -rs
-      - name: Reuse a session directory created by PowerShell
+      - run: npm test
+      - name: Verify packaged CLI installs offline and runs outside source
+        run: npm run test:package
+      - name: Reuse a PowerShell-created session directory
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $sessionPath = Join-Path $env:RUNNER_TEMP "nighttable-powershell-session"
+          $sessionPath = Join-Path $env:RUNNER_TEMP "nighttable-ts-session"
           New-Item -ItemType Directory -Force -Path $sessionPath | Out-Null
-          python -c "from nighttable_cli.client import Client; import sys; c=Client('http://127.0.0.1:8765', sys.argv[1]); c.save(); Client('http://127.0.0.1:8765', sys.argv[1]); print('PowerShell-created session directory and existing cookie file reused')" "$sessionPath"
-      - name: Run installed entry point outside the source tree
-        working-directory: ${{ runner.temp }}
-        run: nighttable --help
+          node --input-type=module -e "import {Client} from './dist/index.js'; const c=await Client.create('http://127.0.0.1:8765',process.argv[1]); await c.save(); await Client.create('http://127.0.0.1:8765',process.argv[1]); console.log('Session directory and saved cookie reopened')" "$sessionPath"

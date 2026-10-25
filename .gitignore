@@ -18,3 +18,5 @@ game-*.md
 game-*.jsonl
 node_modules/
 *.tgz
+
+.npm-cache/
