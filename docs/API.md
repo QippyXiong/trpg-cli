@@ -1,6 +1,6 @@
 # 共用协议
 
-唯一维护来源为独立 npm 包 **@xiong/trpg-protocol@0.1.0**。types.ts、errors.ts、routes.ts 分别定义结构与枚举、错误码、路径与方法；不包含业务判断。
+唯一维护来源为独立 npm 包 **@qippyxiong/trpg-protocol@0.1.0**。types.ts、errors.ts、routes.ts 分别定义结构与枚举、错误码、路径与方法；不包含业务判断。
 
 正式依赖锁定版本0.1.0，不使用相对路径或要求相邻clone。发布目标已选GitHub Packages；实际仓库地址与访问权限仍待核验。当前开发环境用已打包tgz安装验证，不等同于已发布。
 

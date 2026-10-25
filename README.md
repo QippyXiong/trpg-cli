@@ -5,7 +5,7 @@
 
 ## 首次安装：共享包尚未发布
 
-**当前 `@xiong/trpg-protocol@0.1.0` 尚未发布到 GitHub Packages。直接在本仓库执行 `npm install` 可能因版本不存在或未授权而失败；请先走下面的本地打包流程。** 已提交的协议生成物可供运行，更新或核验依赖时需要此流程。
+**当前 `@qippyxiong/trpg-protocol@0.1.0` 尚未发布到 GitHub Packages。直接在本仓库执行 `npm install` 可能因版本不存在或未授权而失败；请先走下面的本地打包流程。** 已提交的协议生成物可供运行，更新或核验依赖时需要此流程。
 
 需要 Node.js 22+。以下相邻目录只用于发布前临时开发，不是正式分发要求。
 
@@ -18,27 +18,27 @@
    npm pack
    ```
 
-   `npm pack` 会自动编译，生成 `xiong-trpg-protocol-0.1.0.tgz`，无需预先安装应用仓库依赖。
+   `npm pack` 会自动编译，生成 `qippyxiong-trpg-protocol-0.1.0.tgz`，无需预先安装应用仓库依赖。
 
 2. 回到 `trpg-server`、`trpg-web`、`trpg-cli` 中任一仓库根目录，各执行一次：
 
    ```sh
-   npm install --save-exact --ignore-scripts --no-audit --no-fund ../trpg-protocol/xiong-trpg-protocol-0.1.0.tgz
+   npm install --save-exact --ignore-scripts --no-audit --no-fund ../trpg-protocol/qippyxiong-trpg-protocol-0.1.0.tgz
    npm run protocol:sync
    npm run protocol:check
    ```
 
-   安装命令会在本机临时将依赖写成 `file:../trpg-protocol/xiong-trpg-protocol-0.1.0.tgz`，并生成对应安装锁文件。tgz 已被 Git 忽略；也不要把这次临时 `file:` 依赖和它的锁文件当成正式发布配置提交。
+   安装命令会在本机临时将依赖写成 `file:../trpg-protocol/qippyxiong-trpg-protocol-0.1.0.tgz`，并生成对应安装锁文件。tgz 已被 Git 忽略；也不要把这次临时 `file:` 依赖和它的锁文件当成正式发布配置提交。
 
 3. 正式发布到 GitHub Packages，并完成本机登录/私有包读取授权后，切回版本依赖：
 
    ```sh
-   npm install --save-exact --ignore-scripts --no-audit --no-fund @xiong/trpg-protocol@0.1.0
+   npm install --save-exact --ignore-scripts --no-audit --no-fund @qippyxiong/trpg-protocol@0.1.0
    npm run protocol:sync
    npm run protocol:check
    ```
 
-   确认 `package.json` 为 `"@xiong/trpg-protocol": "0.1.0"` 后，提交正式 `package.json` 和 `package-lock.json`；其他开发者此后使用 `npm ci`，不需要相邻协议源码目录。CI 也需等该版本发布并配置读取权限后才能通过安装步骤。
+   确认 `package.json` 为 `"@qippyxiong/trpg-protocol": "0.1.0"` 后，提交正式 `package.json` 和 `package-lock.json`；其他开发者此后使用 `npm ci`，不需要相邻协议源码目录。CI 也需等该版本发布并配置读取权限后才能通过安装步骤。
 
 
 ## 使用
@@ -69,16 +69,16 @@ python3 -m nighttable_cli logout
 
 ## 共用协议依赖
 
-本仓库声明 `@xiong/trpg-protocol: 0.1.0`，正式安装不依赖相邻目录。包发布目标已选GitHub Packages，实际仓库地址与权限待核验，当前只用已打包tgz完成本地验证。发布后执行 `npm install --ignore-scripts`、`npm run protocol:sync`、`npm run protocol:check` 并提交安装锁文件。Python运行无需Node。详见 [协议说明](docs/API.md)。
+本仓库声明 `@qippyxiong/trpg-protocol: 0.1.0`，正式安装不依赖相邻目录。包发布目标已选GitHub Packages，实际仓库地址与权限待核验，当前只用已打包tgz完成本地验证。发布后执行 `npm install --ignore-scripts`、`npm run protocol:sync`、`npm run protocol:check` 并提交安装锁文件。Python运行无需Node。详见 [协议说明](docs/API.md)。
 
 ## 固定分发边界
 
-仅 `@xiong/trpg-protocol` 使用 npm 独立分发。服务端保持 Python 项目，网页分发静态资源，CLI 保持 Python 包（`python3 -m nighttable_cli` 或安装后的终端命令）。应用仓库里的 package.json 只用于构建期契约依赖与检查，不表示将 Python 应用改成 npm 应用。
+仅 `@qippyxiong/trpg-protocol` 使用 npm 独立分发。服务端保持 Python 项目，网页分发静态资源，CLI 保持 Python 包（`python3 -m nighttable_cli` 或安装后的终端命令）。应用仓库里的 package.json 只用于构建期契约依赖与检查，不表示将 Python 应用改成 npm 应用。
 
 ## GitHub Packages 发布方案
 
-已选择私有 GitHub Packages，scope 映射在 .npmrc，发布 registry 被限定为 https://npm.pkg.github.com。实际仓库所有者必须与 @xiong 对应；当前尚未拿到远程地址，未推送或发布。
+已选择私有 GitHub Packages，scope 映射在 .npmrc，发布 registry 被限定为 https://npm.pkg.github.com。实际仓库所有者必须与 @qippyxiong 对应；当前尚未拿到远程地址，未推送或发布。
 
-协议仓库的 Publish private protocol package 工作流只可手动触发，先核验私有仓库及scope，再测试、绑定实际仓库URL并发布；新包按GitHub默认保持private，不添加public发布选项。三端CI具备packages:read，仍须在包的Actions访问设置中授予这些私有仓库读取权限，或配置只读NPM_READ_TOKEN。本机可通过npm login --scope=@xiong --auth-type=legacy --registry=https://npm.pkg.github.com认证，token只在本机输入，不入库或群聊。
+协议仓库的 Publish private protocol package 工作流只可手动触发，先核验私有仓库及scope，再测试、绑定实际仓库URL并发布；新包按GitHub默认保持private，不添加public发布选项。三端CI具备packages:read，仍须在包的Actions访问设置中授予这些私有仓库读取权限，或配置只读NPM_READ_TOKEN。本机可通过npm login --scope=@qippyxiong --auth-type=legacy --registry=https://npm.pkg.github.com认证，token只在本机输入，不入库或群聊。
 
 CI正式验收会先通过认证查询GitHub Packages上的0.1.0，再安装并检查契约；不会接受file依赖作为通过依据。目前这条真实私有registry链路尚未实测，等待远程仓库与包读取授权。
