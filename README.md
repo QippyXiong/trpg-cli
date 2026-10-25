@@ -80,3 +80,5 @@ python3 -m nighttable_cli logout
 已选择私有 GitHub Packages，scope 映射在 .npmrc，发布 registry 被限定为 https://npm.pkg.github.com。实际仓库所有者必须与 @xiong 对应；当前尚未拿到远程地址，未推送或发布。
 
 协议仓库的 Publish private protocol package 工作流只可手动触发，先核验私有仓库及scope，再测试、绑定实际仓库URL并发布；新包按GitHub默认保持private，不添加public发布选项。三端CI具备packages:read，仍须在包的Actions访问设置中授予这些私有仓库读取权限，或配置只读NPM_READ_TOKEN。本机可通过npm login --scope=@xiong --auth-type=legacy --registry=https://npm.pkg.github.com认证，token只在本机输入，不入库或群聊。
+
+CI正式验收会先通过认证查询GitHub Packages上的0.1.0，再安装并检查契约；不会接受file依赖作为通过依据。目前这条真实私有registry链路尚未实测，等待远程仓库与包读取授权。
