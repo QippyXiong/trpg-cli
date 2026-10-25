@@ -44,7 +44,7 @@ python3 -m nighttable_cli logout
 
 主持人和高级操作可用 `api settlement --body-file settlement.json` 等提交完整 API JSON；权限不变。导出文件默认拒绝覆盖。用户自己的会话和导出不可提交到 Git。
 
-运行CLI无需其他源码仓库；跨仓库回归可在相邻 trpg-server 和 trpg-web 存在时运行：`python3 -m unittest discover -s tests`。本版是命令式 CLI，暂不提供全屏 TUI 或后台自动决策。
+本版是命令式 CLI，暂不提供全屏 TUI 或后台自动决策。独立测试与可选跨仓库集成测试见下节。
 
 ## 固定分发边界
 
@@ -52,3 +52,24 @@ python3 -m nighttable_cli logout
 
 源码公开与GitHub Packages包公开是独立设置；安装与CI状态以实际验证为准。
 
+
+## 独立仓库测试与安装验证
+
+仅clone本仓库即可测试，无需server/web源码，无需npm或GitHub Packages凭据：
+
+    python3 -m pip install '.[test]'
+    python3 -m pytest -q -rs
+
+也支持仅用标准库运行测试：
+
+    python3 -m unittest discover -s tests -v
+
+独立套件在本机临时HTTP服务上验证Cookie持久化、服务端地址选择、行动轮号/request_id、错误与不自动重试、重定向拒绝、导出及防覆盖；不导入服务端实现。
+
+跨仓库集成是可选项，只有显式同时配置以下环境变量才启用：
+
+    TRPG_SERVER_DIR=/path/to/trpg-server TRPG_WEB_DIR=/path/to/trpg-web python3 -m pytest -q -rs
+
+路径均指仓库根目录；集成测试还需服务端自己的依赖（含Pillow）。不设置变量时，跨仓库测试明确显示SKIPPED；设置了无效路径则报错，不把配置错误当成通过。缺少相邻目录不会再导致pytest收集失败。
+
+CI从单独checkout构建安装Python包，在Python 3.9/3.12上跑独立测试，并从源码目录之外运行nighttable --help，验证安装包包含protocol.json。可选集成未启用时会分别报告“独立通过”和“集成跳过”，不混成全部通过。

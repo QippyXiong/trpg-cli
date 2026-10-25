@@ -10,6 +10,9 @@ license = {file = "LICENSE"}
 requires-python = ">=3.9"
 dependencies = []
 
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
 [project.scripts]
 nighttable = "nighttable_cli.client:main"
 
@@ -18,3 +21,7 @@ include = ["nighttable_cli*"]
 
 [tool.setuptools.package-data]
 nighttable_cli = ["protocol.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

@@ -14,17 +14,32 @@ from http.server import ThreadingHTTPServer
 from urllib.parse import urlsplit
 from nighttable_cli.client import Client,main
 
-BASE=Path(__file__).resolve().parents[2]
-BACKEND=Path(os.environ.get('TRPG_SERVER_DIR',BASE/'trpg-server'))
-WEB=Path(os.environ.get('TRPG_WEB_DIR',BASE/'trpg-web'))
-sys.path.insert(0,str(BACKEND))
-import server as room
-spec=importlib.util.spec_from_file_location('web_dev',WEB/'dev.py');web=importlib.util.module_from_spec(spec);spec.loader.exec_module(web)
-
 class Integration(unittest.TestCase):
  @classmethod
  def setUpClass(cls):
-  cls.tmp=tempfile.TemporaryDirectory();room.DATA=Path(cls.tmp.name)/'db';room.CONFIG=BACKEND/'config.json';room.initialize()
+  global room, web
+  backend_path=os.environ.get('TRPG_SERVER_DIR')
+  web_path=os.environ.get('TRPG_WEB_DIR')
+  if not backend_path or not web_path:
+   raise unittest.SkipTest('可选跨仓库集成：设置 TRPG_SERVER_DIR 和 TRPG_WEB_DIR 后启用；独立 CLI 测试不需要它们')
+  backend=Path(backend_path).expanduser().resolve()
+  webroot=Path(web_path).expanduser().resolve()
+  required=[backend/'server.py',backend/'config.json',webroot/'dev.py',webroot/'static/index.html']
+  missing=[str(path) for path in required if not path.is_file()]
+  if missing:
+   raise RuntimeError('集成测试路径配置无效：'+', '.join(missing))
+  original_path=list(sys.path)
+  try:
+   sys.path.insert(0,str(backend))
+   spec=importlib.util.spec_from_file_location('_trpg_cli_integration_server',backend/'server.py')
+   room=importlib.util.module_from_spec(spec);spec.loader.exec_module(room)
+   spec=importlib.util.spec_from_file_location('_trpg_cli_integration_web',webroot/'dev.py')
+   web=importlib.util.module_from_spec(spec);spec.loader.exec_module(web)
+  finally:
+   sys.path[:]=original_path
+  cls.tmp=tempfile.TemporaryDirectory()
+  cls.addClassCleanup(cls.tmp.cleanup)
+  room.DATA=Path(cls.tmp.name)/'db';room.CONFIG=backend/'config.json';room.WEB=webroot/'static';room.initialize()
   room.create_user('host','主持人','dm','integration-only-password');room.create_user('player','玩家','player','integration-only-password')
   cls.api=room.RoomServer(('127.0.0.1',0),room.Handler);threading.Thread(target=cls.api.serve_forever,daemon=True).start();cls.url='http://127.0.0.1:'+str(cls.api.server_port)
   cls.web=ThreadingHTTPServer(('127.0.0.1',0),web.Handler);cls.web.backend=urlsplit(cls.url);threading.Thread(target=cls.web.serve_forever,daemon=True).start();cls.web_url='http://127.0.0.1:'+str(cls.web.server_port)
