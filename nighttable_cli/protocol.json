@@ -4,218 +4,180 @@
   "routes": {
     "action/retract": {
       "path": "/api/action/retract",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "audio/": {
       "path": "/api/audio/",
-      "method": "GET",
-      "flow": false
+      "method": "GET"
     },
     "character": {
       "path": "/api/character",
-      "method": "POST",
-      "flow": false
+      "method": "POST"
     },
     "dice": {
       "path": "/api/dice",
-      "method": "POST",
-      "flow": false
+      "method": "POST"
     },
     "export": {
       "path": "/api/export",
-      "method": "GET",
-      "flow": false
+      "method": "GET"
     },
     "final": {
       "path": "/api/final",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "game/create": {
       "path": "/api/game/create",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "game/end": {
       "path": "/api/game/end",
-      "method": "POST",
-      "flow": false
+      "method": "POST"
     },
     "game/image": {
       "path": "/api/game/image",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "game/join": {
       "path": "/api/game/join",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "game/launch": {
       "path": "/api/game/launch",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "game/ready": {
       "path": "/api/game/ready",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "game/start": {
       "path": "/api/game/start",
-      "method": "POST",
-      "flow": false
+      "method": "POST"
     },
     "games": {
       "path": "/api/games",
-      "method": "GET",
-      "flow": false
+      "method": "GET"
     },
     "history": {
       "path": "/api/history",
-      "method": "GET",
-      "flow": false
+      "method": "GET"
     },
     "login": {
       "path": "/api/login",
-      "method": "POST",
-      "flow": false
+      "method": "POST"
     },
     "logout": {
       "path": "/api/logout",
-      "method": "POST",
-      "flow": false
+      "method": "POST"
     },
     "message": {
       "path": "/api/message",
-      "method": "POST",
-      "flow": false
+      "method": "POST"
     },
     "narration": {
       "path": "/api/narration",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "objective/update": {
       "path": "/api/objective/update",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "player/kick": {
       "path": "/api/player/kick",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "player/state": {
       "path": "/api/player/state",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "portrait": {
       "path": "/api/portrait",
-      "method": "POST",
-      "flow": false
+      "method": "POST"
     },
     "portraits/": {
       "path": "/api/portraits/",
-      "method": "GET",
-      "flow": false
+      "method": "GET"
     },
     "random/audit": {
       "path": "/api/random/audit",
-      "method": "GET",
-      "flow": false
+      "method": "GET"
     },
     "random/consume": {
       "path": "/api/random/consume",
-      "method": "POST",
-      "flow": false
+      "method": "POST"
     },
     "random/discard": {
       "path": "/api/random/discard",
-      "method": "POST",
-      "flow": false
+      "method": "POST"
     },
     "random/reveal": {
       "path": "/api/random/reveal",
-      "method": "POST",
-      "flow": false
+      "method": "POST"
     },
     "ready": {
       "path": "/api/ready",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "review/host": {
       "path": "/api/review/host",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "role/select": {
       "path": "/api/role/select",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "round/next": {
       "path": "/api/round/next",
-      "method": "POST",
-      "flow": false
+      "method": "POST"
     },
     "scenario/opening-image": {
       "path": "/api/scenario/opening-image",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "scenario/template": {
       "path": "/api/scenario/template",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "scenario/update": {
       "path": "/api/scenario/update",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "scene": {
       "path": "/api/scene",
-      "method": "POST",
-      "flow": false
+      "method": "POST"
     },
     "settlement": {
       "path": "/api/settlement",
-      "method": "POST",
-      "flow": true
+      "method": "POST"
     },
     "state": {
       "path": "/api/state",
-      "method": "GET",
-      "flow": false
+      "method": "GET"
     }
   },
-  "eventLabels": {
-    "action": "行动声明",
-    "chat": "桌边闲聊",
-    "settlement": "主持人结算",
-    "dice": "掷骰",
-    "system": "桌面动态",
-    "opening": "开场",
-    "state_change": "状态变化",
-    "item_change": "物品变化",
-    "item_intent": "物品申报",
-    "item_found": "物品发现",
-    "objective_change": "目标变化",
-    "turn_started": "行动开始",
-    "turn_skipped": "超时跳过",
-    "turn_order": "行动顺序",
-    "turn_order_reveal": "顺序复核",
-    "final": "终局评价",
-    "retraction": "行动退回",
-    "private_choice": "个人选项",
-    "review": "玩家评价",
-    "round_timeout": "本轮超时",
-    "moderation": "主持人管理"
-  },
+  "eventKinds": [
+    "action",
+    "chat",
+    "settlement",
+    "dice",
+    "system",
+    "opening",
+    "state_change",
+    "item_change",
+    "item_intent",
+    "item_found",
+    "objective_change",
+    "turn_started",
+    "turn_skipped",
+    "turn_order",
+    "turn_order_reveal",
+    "final",
+    "retraction",
+    "private_choice",
+    "review",
+    "round_timeout",
+    "moderation"
+  ],
   "visibility": [
     "public",
     "private",
@@ -232,5 +194,17 @@
     "text",
     "check_id"
   ],
-  "ownership": "Protocol describes transport only; DM adjudication and server authorization remain server-owned."
+  "errorCodes": {
+    "INVALID_REQUEST": 400,
+    "AUTH_REQUIRED": 401,
+    "FORBIDDEN": 403,
+    "NOT_FOUND": 404,
+    "CONFLICT": 409,
+    "PAYLOAD_TOO_LARGE": 413,
+    "UNSUPPORTED_MEDIA_TYPE": 415,
+    "RATE_LIMITED": 429,
+    "INTERNAL_ERROR": 500,
+    "BAD_GATEWAY": 502,
+    "SERVICE_UNAVAILABLE": 503
+  }
 }

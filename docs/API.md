@@ -1,7 +1,7 @@
 # 共用协议
 
-API 路由、事件字段和类型的唯一维护来源现在是 `trpg-protocol` npm 包：`contract.json`、`schemas/` 和 `index.d.ts`。本仓库中的协议产物由该依赖生成，不是另一份手写规范。
+唯一维护来源为独立 npm 包 **@xiong/trpg-protocol@0.1.0**。types.ts、errors.ts、routes.ts 分别定义结构与枚举、错误码、路径与方法；不包含业务判断。
 
-相邻检出 trpg-protocol 后，执行 `npm install --ignore-scripts`、`npm run protocol:sync`、`npm run protocol:check`。协议版本和 SHA-256 记录在 protocol.lock.json；提交生成物使运行时不必启动 Node。API 业务授权与兼容性仍由 trpg-server 执行，契约不替 DM 作判断。
+正式依赖锁定版本0.1.0，不使用相对路径或要求相邻clone。发布目标尚待确认：发布后按实际registry安装，或由所有者指定Git URL和版本标签。当前开发环境用已打包tgz安装验证，不等同于已发布。
 
-未登录 state 仅返回公开配置；401需登录、403权限/死亡、409轮次/顺序冲突、400参数错误。浏览器保持同源 Cookie。私密内容按请求者裁剪，不得由客户端推断全量事件。
+安装包后执行 npm run protocol:sync 和 npm run protocol:check。生成物随Git提交，Python运行不依赖Node；protocol.lock.json保存版本与SHA-256，不能手改。网页文案、服务端路由分发、血量和结局判断均不在协议里。

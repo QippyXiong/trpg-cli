@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "protocol:sync": "trpg-protocol-sync cli",
-    "protocol:check": "trpg-protocol-sync cli --check"
+    "protocol:sync": "node scripts/protocol.mjs",
+    "protocol:check": "node scripts/protocol.mjs --check"
   },
   "dependencies": {
-    "trpg-protocol": "file:../trpg-protocol"
+    "@xiong/trpg-protocol": "0.1.0"
   }
 }

@@ -26,8 +26,8 @@ python3 -m nighttable_cli logout
 
 主持人和高级操作可用 `api settlement --body-file settlement.json` 等提交完整 API JSON；权限不变。导出文件默认拒绝覆盖。用户自己的会话和导出不可提交到 Git。
 
-CLI 回归可在相邻 trpg-server 存在时运行：`python3 -m unittest discover -s tests`。本版是命令式 CLI，暂不提供全屏 TUI 或后台自动决策。
+运行CLI无需其他源码仓库；跨仓库回归可在相邻 trpg-server 和 trpg-web 存在时运行：`python3 -m unittest discover -s tests`。本版是命令式 CLI，暂不提供全屏 TUI 或后台自动决策。
 
 ## 共用协议依赖
 
-三个项目共同依赖 `trpg-protocol` npm 包，四个仓库需相邻检出。更新协议执行 `npm install --ignore-scripts`、`npm run protocol:sync` 和 `npm run protocol:check`。协议产物与版本哈希随 Git 提交，应用运行时无需 Node；详见 [协议说明](docs/API.md)。
+本仓库声明 `@xiong/trpg-protocol: 0.1.0`，正式安装不依赖相邻目录。包发布目标尚待确认，当前只用已打包tgz完成本地验证。发布后执行 `npm install --ignore-scripts`、`npm run protocol:sync`、`npm run protocol:check` 并提交安装锁文件。Python运行无需Node。详见 [协议说明](docs/API.md)。
