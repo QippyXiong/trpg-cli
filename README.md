@@ -31,3 +31,7 @@ python3 -m nighttable_cli logout
 ## 共用协议依赖
 
 本仓库声明 `@xiong/trpg-protocol: 0.1.0`，正式安装不依赖相邻目录。包发布目标尚待确认，当前只用已打包tgz完成本地验证。发布后执行 `npm install --ignore-scripts`、`npm run protocol:sync`、`npm run protocol:check` 并提交安装锁文件。Python运行无需Node。详见 [协议说明](docs/API.md)。
+
+## 固定分发边界
+
+仅 `@xiong/trpg-protocol` 使用 npm 独立分发。服务端保持 Python 项目，网页分发静态资源，CLI 保持 Python 包（`python3 -m nighttable_cli` 或安装后的终端命令）。应用仓库里的 package.json 只用于构建期契约依赖与检查，不表示将 Python 应用改成 npm 应用。
