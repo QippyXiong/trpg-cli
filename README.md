@@ -45,3 +45,14 @@ python3 -m nighttable_cli logout
 仅 `@qippyxiong/trpg-protocol` 使用 npm 独立分发。服务端保持 Python 项目，网页分发静态资源，CLI 保持 Python 包（`python3 -m nighttable_cli` 或安装后的终端命令）。应用仓库里的 package.json 只用于构建期契约依赖与检查，不表示将 Python 应用改成 npm 应用。
 
 源码公开与GitHub Packages包公开是独立设置；安装与CI状态以实际验证为准。
+
+## 无Token获取npm契约包
+
+公开Release提供与registry相同的MIT包，不需要GitHub登录：
+
+```sh
+npm install --save-exact https://github.com/QippyXiong/trpg-protocol/releases/download/v0.1.1/qippyxiong-trpg-protocol-0.1.1.tgz
+npm run protocol:sync
+```
+
+这只是无需认证的开发安装方式；Python CLI运行本身不需要安装npm包。正式依赖仍保持0.1.1版本号，GitHub Packages安装仍遵循其认证规则。
