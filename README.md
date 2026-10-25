@@ -2,6 +2,45 @@
 
 夜航终端客户端，Python 3.9+，运行时零第三方依赖。通过 HTTP API 连接 trpg-server，不接触数据库或复制结算规则。
 
+
+## 首次安装：共享包尚未发布
+
+**当前 `@xiong/trpg-protocol@0.1.0` 尚未发布到 GitHub Packages。直接在本仓库执行 `npm install` 可能因版本不存在或未授权而失败；请先走下面的本地打包流程。** 已提交的协议生成物可供运行，更新或核验依赖时需要此流程。
+
+需要 Node.js 22+。以下相邻目录只用于发布前临时开发，不是正式分发要求。
+
+1. 在共同父目录 clone 协议仓库并打包（将占位符换成实际仓库地址）：
+
+   ```sh
+   git clone <trpg-protocol仓库地址> trpg-protocol
+   cd trpg-protocol
+   npm ci --ignore-scripts --no-audit --no-fund
+   npm pack
+   ```
+
+   `npm pack` 会自动编译，生成 `xiong-trpg-protocol-0.1.0.tgz`，无需预先安装应用仓库依赖。
+
+2. 回到 `trpg-server`、`trpg-web`、`trpg-cli` 中任一仓库根目录，各执行一次：
+
+   ```sh
+   npm install --save-exact --ignore-scripts --no-audit --no-fund ../trpg-protocol/xiong-trpg-protocol-0.1.0.tgz
+   npm run protocol:sync
+   npm run protocol:check
+   ```
+
+   安装命令会在本机临时将依赖写成 `file:../trpg-protocol/xiong-trpg-protocol-0.1.0.tgz`，并生成对应安装锁文件。tgz 已被 Git 忽略；也不要把这次临时 `file:` 依赖和它的锁文件当成正式发布配置提交。
+
+3. 正式发布到 GitHub Packages，并完成本机登录/私有包读取授权后，切回版本依赖：
+
+   ```sh
+   npm install --save-exact --ignore-scripts --no-audit --no-fund @xiong/trpg-protocol@0.1.0
+   npm run protocol:sync
+   npm run protocol:check
+   ```
+
+   确认 `package.json` 为 `"@xiong/trpg-protocol": "0.1.0"` 后，提交正式 `package.json` 和 `package-lock.json`；其他开发者此后使用 `npm ci`，不需要相邻协议源码目录。CI 也需等该版本发布并配置读取权限后才能通过安装步骤。
+
+
 ## 使用
 
 在仓库目录直接运行：
