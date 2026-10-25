@@ -1,7 +1,7 @@
-# 共用协议
+# 共用契约
 
-唯一维护来源为独立 npm 包 **@qippyxiong/trpg-protocol@0.1.1**。types.ts、errors.ts、routes.ts 分别定义结构与枚举、错误码、路径与方法；不包含业务判断。
+契约源码位于trpg-protocol（仅类型、错误码、路由），应用业务与鉴权仍在server。当前固定公开Release v0.1.1；包名@qippyxiong/trpg-protocol。
 
-正式依赖锁定版本0.1.1，不使用相对路径或要求相邻clone。协议0.1.1已发布到私有GitHub Packages，本机真实冷安装已验证；CI跨仓库读取授权仍待完成。
+package.json及package-lock.json均使用真实Release URL，protocol-release.json固定版本和文件SHA-256，安装锁记录SHA-512。CI先验证再安装，不需要registry凭据。生成JSON/浏览器常量仍由npm run protocol:sync生成，npm run protocol:check检测漂移。
 
-安装包后执行 npm run protocol:sync 和 npm run protocol:check。生成物随Git提交，Python运行不依赖Node；protocol.lock.json保存版本与SHA-256，不能手改。网页文案、服务端路由分发、血量和结局判断均不在协议里。
+npm官方registry尚未发布，不与Release安装通过混同。

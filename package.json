@@ -7,6 +7,6 @@
     "protocol:check": "node scripts/protocol.mjs --check"
   },
   "dependencies": {
-    "@qippyxiong/trpg-protocol": "0.1.1"
+    "@qippyxiong/trpg-protocol": "https://github.com/QippyXiong/trpg-protocol/releases/download/v0.1.1/qippyxiong-trpg-protocol-0.1.1.tgz"
   }
 }

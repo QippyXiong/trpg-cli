@@ -3,14 +3,22 @@
 夜航终端客户端，Python 3.9+，运行时零第三方依赖。通过 HTTP API 连接 trpg-server，不接触数据库或复制结算规则。
 
 
+## 当前协议安装方式：公开 Release
+
+共享契约固定为公开Release v0.1.1，package.json和package-lock.json均记录真实公开URL及完整性校验。当前安装不需要npmjs账号、GitHub Packages包权限或本地协议目录。npm公网发布仍是独立待办，不因CI通过而宣称已发布。
+
+CI显式curl下载，先对照protocol-release.json与安装锁验证SHA-256/SHA-512，再以--ignore-scripts安装并检查协议；不传递包registry凭据。常规环境可运行npm ci。若本机Node证书链不信任下载站点，可使用以下等效流程，保留TLS校验：
+
+    curl --fail --location --proto '=https' -o protocol.tgz https://github.com/QippyXiong/trpg-protocol/releases/download/v0.1.1/qippyxiong-trpg-protocol-0.1.1.tgz
+    node scripts/check-release.mjs protocol.tgz
+    npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund ./protocol.tgz
+    npm run protocol:check
+
+该流程不改写提交的依赖和锁文件。tgz仍被Git忽略。未来真正发布npmjs后再显式迁移依赖和锁文件。
+
 ## 开源使用与依赖
 
-本项目MIT开源。公开clone后可直接运行Python CLI，运行不需要Node或GitHub Packages凭据；协议JSON包含在源码和Python安装包里。实际服务端地址与账号由运行者提供。
-
-协议包正在从GitHub Packages迁移至npm官方registry。**npmjs版本尚未发布，当前锁文件仍是已验证的GitHub Packages来源**；不要把源码公开等同于无需认证的registry安装完成。待npmjs发布后，将消费端scope映射、锁文件及CI一起切换并做匿名冷安装。
-
-发布前需要更新协议的开发者，可用本README末尾的公开Release压缩包临时安装；Python运行本身不需要这一步。
-
+本项目MIT开源。Python CLI运行不依赖Node或registry凭据；协议JSON已包含在源码及安装包中。开发契约采用上文固定的公开Release，不需要私有包读取授权。服务端地址和游戏账号由实际运行者提供。
 
 ## 使用
 
@@ -38,23 +46,9 @@ python3 -m nighttable_cli logout
 
 运行CLI无需其他源码仓库；跨仓库回归可在相邻 trpg-server 和 trpg-web 存在时运行：`python3 -m unittest discover -s tests`。本版是命令式 CLI，暂不提供全屏 TUI 或后台自动决策。
 
-## 共用协议依赖
-
-本仓库声明 `@qippyxiong/trpg-protocol: 0.1.1`，正式安装不依赖相邻目录。包已发布到GitHub Packages并完成真实冷安装验证，CI跨仓库授权仍待完成。更新协议时执行 `npm install --ignore-scripts`、`npm run protocol:sync`、`npm run protocol:check` 并提交安装锁文件。Python运行无需Node。详见 [协议说明](docs/API.md)。
-
 ## 固定分发边界
 
 仅 `@qippyxiong/trpg-protocol` 使用 npm 独立分发。服务端保持 Python 项目，网页分发静态资源，CLI 保持 Python 包（`python3 -m nighttable_cli` 或安装后的终端命令）。应用仓库里的 package.json 只用于构建期契约依赖与检查，不表示将 Python 应用改成 npm 应用。
 
 源码公开与GitHub Packages包公开是独立设置；安装与CI状态以实际验证为准。
 
-## 无Token获取npm契约包
-
-公开Release提供与registry相同的MIT包，不需要GitHub登录：
-
-```sh
-npm install --save-exact https://github.com/QippyXiong/trpg-protocol/releases/download/v0.1.1/qippyxiong-trpg-protocol-0.1.1.tgz
-npm run protocol:sync
-```
-
-这只是无需认证的开发安装方式；Python CLI运行本身不需要安装npm包。正式依赖仍保持0.1.1版本号，GitHub Packages安装仍遵循其认证规则。
