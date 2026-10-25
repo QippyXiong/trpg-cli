@@ -5,9 +5,11 @@
 
 ## 开源使用与依赖
 
-本项目采用[MIT许可证](LICENSE)。公开clone后可直接运行Python CLI，**运行不需要Node或GitHub Packages凭据**，协议JSON已包含在源码与Python安装包中。服务端地址及登录账号需由实际运行者提供。
+本项目MIT开源。公开clone后可直接运行Python CLI，运行不需要Node或GitHub Packages凭据；协议JSON包含在源码和Python安装包里。实际服务端地址与账号由运行者提供。
 
-只有开发或更新共用契约时才需要npm：协议源码同样MIT开源，npm包保留在GitHub Packages；该registry即使公开仍要求认证。凭据放用户配置或GitHub Actions Secrets，不写进项目或群聊。
+协议包正在从GitHub Packages迁移至npm官方registry。**npmjs版本尚未发布，当前锁文件仍是已验证的GitHub Packages来源**；不要把源码公开等同于无需认证的registry安装完成。待npmjs发布后，将消费端scope映射、锁文件及CI一起切换并做匿名冷安装。
+
+发布前需要更新协议的开发者，可用本README末尾的公开Release压缩包临时安装；Python运行本身不需要这一步。
 
 
 ## 使用
