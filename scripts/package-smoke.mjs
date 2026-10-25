@@ -23,7 +23,7 @@ try {
  if(!help.includes('action')||!help.includes('login'))throw Error('Installed help incomplete');
  const bin=join(prefix,process.platform==='win32'?'nighttable.cmd':'bin/nighttable');await access(bin);
  const output=process.platform==='win32'
-  ?command(process.env.ComSpec||'cmd.exe',['/d','/s','/c','"'+bin+'" --version'])
+  ?command(process.env.ComSpec||'cmd.exe',['/d','/s','/c','nighttable.cmd --version'],prefix)
   :command(bin,['--version']);
  if(output.trim()!=='0.2.0')throw Error('Installed launcher failed: '+output);
  console.log('PASS: packed CLI installs offline with bundled protocol and runs outside the source tree');
