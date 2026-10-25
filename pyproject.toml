@@ -14,3 +14,6 @@ nighttable = "nighttable_cli.client:main"
 
 [tool.setuptools.packages.find]
 include = ["nighttable_cli*"]
+
+[tool.setuptools.package-data]
+nighttable_cli = ["protocol.json"]

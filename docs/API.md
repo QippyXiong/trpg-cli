@@ -1,5 +1,7 @@
-# API 契约入口
+# 共用协议
 
-唯一维护来源为 `trpg-server/docs/API.md`。本仓库不复制事件结构或 API 字段定义，避免三份规范分别修改。请配合服务端检出使用，并运行跨仓库集成测试核对。协议变更先在服务端明确兼容性，再更新客户端。
+API 路由、事件字段和类型的唯一维护来源现在是 `trpg-protocol` npm 包：`contract.json`、`schemas/` 和 `index.d.ts`。本仓库中的协议产物由该依赖生成，不是另一份手写规范。
 
-当前使用 JSON HTTP API 与 Cookie 会话；权限、顺序、超时和提交锁定以服务端返回为准。暂不建立独立协议包；以后需要生成类型或 SDK 时再抽取。
+相邻检出 trpg-protocol 后，执行 `npm install --ignore-scripts`、`npm run protocol:sync`、`npm run protocol:check`。协议版本和 SHA-256 记录在 protocol.lock.json；提交生成物使运行时不必启动 Node。API 业务授权与兼容性仍由 trpg-server 执行，契约不替 DM 作判断。
+
+未登录 state 仅返回公开配置；401需登录、403权限/死亡、409轮次/顺序冲突、400参数错误。浏览器保持同源 Cookie。私密内容按请求者裁剪，不得由客户端推断全量事件。

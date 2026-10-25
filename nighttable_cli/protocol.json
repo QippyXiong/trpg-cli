@@ -1,0 +1,236 @@
+{
+  "version": "0.1.0",
+  "apiPrefix": "/api/",
+  "routes": {
+    "action/retract": {
+      "path": "/api/action/retract",
+      "method": "POST",
+      "flow": true
+    },
+    "audio/": {
+      "path": "/api/audio/",
+      "method": "GET",
+      "flow": false
+    },
+    "character": {
+      "path": "/api/character",
+      "method": "POST",
+      "flow": false
+    },
+    "dice": {
+      "path": "/api/dice",
+      "method": "POST",
+      "flow": false
+    },
+    "export": {
+      "path": "/api/export",
+      "method": "GET",
+      "flow": false
+    },
+    "final": {
+      "path": "/api/final",
+      "method": "POST",
+      "flow": true
+    },
+    "game/create": {
+      "path": "/api/game/create",
+      "method": "POST",
+      "flow": true
+    },
+    "game/end": {
+      "path": "/api/game/end",
+      "method": "POST",
+      "flow": false
+    },
+    "game/image": {
+      "path": "/api/game/image",
+      "method": "POST",
+      "flow": true
+    },
+    "game/join": {
+      "path": "/api/game/join",
+      "method": "POST",
+      "flow": true
+    },
+    "game/launch": {
+      "path": "/api/game/launch",
+      "method": "POST",
+      "flow": true
+    },
+    "game/ready": {
+      "path": "/api/game/ready",
+      "method": "POST",
+      "flow": true
+    },
+    "game/start": {
+      "path": "/api/game/start",
+      "method": "POST",
+      "flow": false
+    },
+    "games": {
+      "path": "/api/games",
+      "method": "GET",
+      "flow": false
+    },
+    "history": {
+      "path": "/api/history",
+      "method": "GET",
+      "flow": false
+    },
+    "login": {
+      "path": "/api/login",
+      "method": "POST",
+      "flow": false
+    },
+    "logout": {
+      "path": "/api/logout",
+      "method": "POST",
+      "flow": false
+    },
+    "message": {
+      "path": "/api/message",
+      "method": "POST",
+      "flow": false
+    },
+    "narration": {
+      "path": "/api/narration",
+      "method": "POST",
+      "flow": true
+    },
+    "objective/update": {
+      "path": "/api/objective/update",
+      "method": "POST",
+      "flow": true
+    },
+    "player/kick": {
+      "path": "/api/player/kick",
+      "method": "POST",
+      "flow": true
+    },
+    "player/state": {
+      "path": "/api/player/state",
+      "method": "POST",
+      "flow": true
+    },
+    "portrait": {
+      "path": "/api/portrait",
+      "method": "POST",
+      "flow": false
+    },
+    "portraits/": {
+      "path": "/api/portraits/",
+      "method": "GET",
+      "flow": false
+    },
+    "random/audit": {
+      "path": "/api/random/audit",
+      "method": "GET",
+      "flow": false
+    },
+    "random/consume": {
+      "path": "/api/random/consume",
+      "method": "POST",
+      "flow": false
+    },
+    "random/discard": {
+      "path": "/api/random/discard",
+      "method": "POST",
+      "flow": false
+    },
+    "random/reveal": {
+      "path": "/api/random/reveal",
+      "method": "POST",
+      "flow": false
+    },
+    "ready": {
+      "path": "/api/ready",
+      "method": "POST",
+      "flow": true
+    },
+    "review/host": {
+      "path": "/api/review/host",
+      "method": "POST",
+      "flow": true
+    },
+    "role/select": {
+      "path": "/api/role/select",
+      "method": "POST",
+      "flow": true
+    },
+    "round/next": {
+      "path": "/api/round/next",
+      "method": "POST",
+      "flow": false
+    },
+    "scenario/opening-image": {
+      "path": "/api/scenario/opening-image",
+      "method": "POST",
+      "flow": true
+    },
+    "scenario/template": {
+      "path": "/api/scenario/template",
+      "method": "POST",
+      "flow": true
+    },
+    "scenario/update": {
+      "path": "/api/scenario/update",
+      "method": "POST",
+      "flow": true
+    },
+    "scene": {
+      "path": "/api/scene",
+      "method": "POST",
+      "flow": false
+    },
+    "settlement": {
+      "path": "/api/settlement",
+      "method": "POST",
+      "flow": true
+    },
+    "state": {
+      "path": "/api/state",
+      "method": "GET",
+      "flow": false
+    }
+  },
+  "eventLabels": {
+    "action": "行动声明",
+    "chat": "桌边闲聊",
+    "settlement": "主持人结算",
+    "dice": "掷骰",
+    "system": "桌面动态",
+    "opening": "开场",
+    "state_change": "状态变化",
+    "item_change": "物品变化",
+    "item_intent": "物品申报",
+    "item_found": "物品发现",
+    "objective_change": "目标变化",
+    "turn_started": "行动开始",
+    "turn_skipped": "超时跳过",
+    "turn_order": "行动顺序",
+    "turn_order_reveal": "顺序复核",
+    "final": "终局评价",
+    "retraction": "行动退回",
+    "private_choice": "个人选项",
+    "review": "玩家评价",
+    "round_timeout": "本轮超时",
+    "moderation": "主持人管理"
+  },
+  "visibility": [
+    "public",
+    "private",
+    "after_review"
+  ],
+  "decisionKinds": [
+    "action",
+    "chat",
+    "settlement"
+  ],
+  "requiredActionFields": [
+    "game_id",
+    "round_no",
+    "text",
+    "check_id"
+  ],
+  "ownership": "Protocol describes transport only; DM adjudication and server authorization remain server-owned."
+}

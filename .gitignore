@@ -16,3 +16,5 @@ build/
 *.md.export
 game-*.md
 game-*.jsonl
+node_modules/
+*.tgz

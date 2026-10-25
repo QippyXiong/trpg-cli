@@ -1,4 +1,5 @@
 """Standard-library HTTP client with private, per-origin cookie persistence."""
+from .protocol_api import API_PREFIX, ROUTES, VERSION
 import argparse
 import getpass
 import hashlib
@@ -36,7 +37,7 @@ class Client:
   finally:
    if temp.exists():temp.unlink()
  def request(self,route,body=None):
-  if not route.startswith('/api/') or urllib.parse.urlsplit(route).netloc or '\\' in route:raise ValueError('仅允许 /api/ 路径')
+  if not route.startswith(API_PREFIX) or urllib.parse.urlsplit(route).netloc or '\\' in route:raise ValueError('仅允许 /api/ 路径')
   q=urllib.request.Request(self.url+route,data=json.dumps(body,ensure_ascii=False).encode() if body is not None else None,headers={'Content-Type':'application/json'} if body is not None else {})
   try:
    with self.opener.open(q,timeout=20) as r:raw=r.read();mime=r.headers.get('Content-Type','')
@@ -66,26 +67,26 @@ def main(argv=None):
  p=parser();a=p.parse_args(argv)
  try:
   c=Client(a.server,a.session_dir);cmd=a.command;body=None
-  if cmd=='login':route='/api/login';body={'username':a.username,'password':getpass.getpass('密码：')}
-  elif cmd=='logout':route='/api/logout';body={}
-  elif cmd=='rooms':route='/api/games'
-  elif cmd=='api':route='/api/'+a.route.lstrip('/');body=json.loads(a.body_file.read_text()) if a.body_file else None
+  if cmd=='login':route=ROUTES['login'];body={'username':a.username,'password':getpass.getpass('密码：')}
+  elif cmd=='logout':route=ROUTES['logout'];body={}
+  elif cmd=='rooms':route=ROUTES['games']
+  elif cmd=='api':route=API_PREFIX+a.route.lstrip('/');body=json.loads(a.body_file.read_text()) if a.body_file else None
   else:
    gid=a.game_id
    if gid<1:raise ValueError('房间号必须为正整数')
    route={'state':'state','history':'history','export':'export','audit':'random/audit'}.get(cmd)
    if route:
-    route='/api/'+route+'?game_id='+str(gid)
+    route=ROUTES[route]+'?game_id='+str(gid)
     if cmd=='history' and a.before is not None:route+='&before='+str(a.before)
     if cmd=='export':route+='&format='+a.format
    else:
     body={'game_id':gid,'request_id':uuid.uuid4().hex}
-    route='/api/'+{'join':'game/join','ready':'game/ready','select':'role/select','action':'message','chat':'message'}[cmd]
+    route=ROUTES[{'join':'game/join','ready':'game/ready','select':'role/select','action':'message','chat':'message'}[cmd]]
     if cmd=='ready':body['ready']=not a.cancel
     if cmd=='select':body['role_id']=a.role_id
     if cmd in ('action','chat'):body.update(kind=cmd,text=a.text)
     if cmd=='action':
-     state=c.request('/api/state?game_id='+str(gid))
+     state=c.request(ROUTES['state']+'?game_id='+str(gid))
      if not state.get('user'):raise ValueError('请先登录')
      body.update(round_no=state['round']['number'],check_id=a.check,item_ids=a.item,take_item_ids=a.take,request_id=a.request_id or body['request_id'])
      print('request_id='+body['request_id'],file=sys.stderr)

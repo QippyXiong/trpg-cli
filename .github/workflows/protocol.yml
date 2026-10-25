@@ -1,0 +1,21 @@
+name: Shared protocol consistency
+on: [push, pull_request]
+jobs:
+  protocol:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: consumer
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/trpg-protocol
+          path: trpg-protocol
+          token: ${{ secrets.PROTOCOL_READ_TOKEN || github.token }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+        working-directory: consumer
+      - run: npm run protocol:check
+        working-directory: consumer
